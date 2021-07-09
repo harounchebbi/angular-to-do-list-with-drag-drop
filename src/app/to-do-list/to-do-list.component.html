@@ -1,0 +1,78 @@
+<div class="input-container">
+  <form [formGroup]="todoForm">
+    <mat-form-field class="input-width">
+      <mat-label>Item</mat-label>
+      <input
+        matInput
+        #newItem
+        placeholder="add an item..."
+        formControlName="item"
+      />
+    </mat-form-field>
+
+    <button
+      class="add-button"
+      mat-raised-button
+      color="primary"
+      [disabled]="todoForm.invalid"
+      (click)="addItem(newItem.value)"
+    >
+      Add
+    </button>
+  </form>
+  <mat-error
+    *ngIf="
+      todoForm.get('item')?.invalid &&
+      (todoForm.get('item')?.dirty || todoForm.get('item')?.touched)
+    "
+  >
+    Please write something.
+  </mat-error>
+</div>
+
+<div cdkDropListGroup>
+  <div class="example-container">
+    <h2>To do</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="items"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div
+        class="example-box"
+        *ngFor="let item of items; let i = index"
+        cdkDrag
+      >
+        {{ item.description }}
+        <button mat-icon-button color="warn" (click)="deleteItem(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Done</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="done"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="example-box" *ngFor="let item of done; let d = index" cdkDrag>
+        {{ item.description }}
+        <div class="icons-box">
+          <button mat-icon-button color="warn" (click)="deleteDoneItem(d)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button color="accent">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
